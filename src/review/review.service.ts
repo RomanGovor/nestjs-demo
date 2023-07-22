@@ -28,7 +28,7 @@ export class ReviewService {
       .exec();
   }
 
-  async deleteByProductId(productId: string) {
+  async deleteByProductId(productId: string): Promise<unknown> {
     return this.reviewModel
       .deleteMany({ productId: new Types.ObjectId(productId) })
       .exec();
