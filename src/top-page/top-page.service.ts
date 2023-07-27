@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ModelType } from '@typegoose/typegoose/lib/types';
-import { InjectModel } from 'nestjs-typegoose';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { TopLevelCategory, TopPageModel } from './top-page.model';
-import { Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class TopPageService {
   constructor(
-    @InjectModel(TopPageModel)
-    private readonly topPageModel: ModelType<TopPageModel>,
+    @InjectModel(TopPageModel.name)
+    private readonly topPageModel: Model<TopPageModel>,
   ) {}
 
   async create(dto: CreateTopPageDto) {

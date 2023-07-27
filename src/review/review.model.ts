@@ -1,21 +1,23 @@
-import { prop } from '@typegoose/typegoose';
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { Types } from 'mongoose';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export interface ReviewModel extends Base {}
-export class ReviewModel extends TimeStamps {
-  @prop()
+export class ReviewModel {
+  @Prop()
   name: string;
 
-  @prop()
+  @Prop()
   title: string;
 
-  @prop()
+  @Prop()
   description: string;
 
-  @prop()
+  @Prop()
   rating: number;
 
-  @prop()
+  @Prop()
   productId: Types.ObjectId;
 }
+
+export type ReviewDocument = ReviewModel & Document;
+
+export const ReviewSchema = SchemaFactory.createForClass(ReviewModel);

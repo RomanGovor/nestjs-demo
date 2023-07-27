@@ -1,5 +1,5 @@
-import { prop, index } from '@typegoose/typegoose';
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 export enum TopLevelCategory {
   Courses,
@@ -9,64 +9,67 @@ export enum TopLevelCategory {
 }
 
 export class HhData {
-  @prop()
+  @Prop()
   count: number;
 
-  @prop()
+  @Prop()
   juniorSalary: number;
 
-  @prop()
+  @Prop()
   middleSalary: number;
 
-  @prop()
+  @Prop()
   seniorSalary: number;
 }
 
 export class TopPageAdvantage {
-  @prop()
+  @Prop()
   title: string;
 
-  @prop()
+  @Prop()
   description: string;
 }
 
-export interface TopPageModel extends Base {}
-
-@index({ '$**': 'text' })
-export class TopPageModel extends TimeStamps {
-  @prop({ enum: TopLevelCategory })
+export class TopPageModel {
+  @Prop({ enum: TopLevelCategory })
   firstCategory: TopLevelCategory;
 
-  @prop()
+  @Prop()
   secondCategory: string;
 
-  @prop({ unique: true })
+  @Prop({ unique: true })
   alias: string;
 
-  @prop()
+  @Prop()
   title: string;
 
-  @prop()
+  @Prop()
   metaTitle: string;
 
-  @prop()
+  @Prop()
   metaDescription: string;
 
-  @prop()
+  @Prop()
   category: string;
 
-  @prop({ type: () => HhData })
+  @Prop({ type: () => HhData })
   hh?: HhData;
 
-  @prop({ type: () => [TopPageAdvantage] })
+  @Prop({ type: () => [TopPageAdvantage] })
   advantages?: TopPageAdvantage[];
 
-  @prop()
+  @Prop()
   seoText?: string;
 
-  @prop()
+  @Prop()
   tagsTitle: string;
 
-  @prop({ type: () => [String] })
+  @Prop({ type: () => [String] })
   tags: string[];
 }
+
+export type TopPageDocument = TopPageModel & Document;
+
+export const TopPageSchema = SchemaFactory.createForClass(TopPageModel);
+
+TopPageSchema.index({ '$**': 'text' });
