@@ -1,8 +1,8 @@
 version: '3'
 services:
   top.api:
-    image: top-api:latest
-    container_name: top-api
+    image: nestjs-demo:latest
+    container_name: nestjs-demo
     restart: always
     ports:
       - 3000:3000
