@@ -1,10 +1,37 @@
-version: '3'
+version: "3.9"
 services:
-  top.api:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo-data:/data/db
+    command: --wiredTigerCacheSizeGB 1.5
+    networks:
+      - db_network
+
+  nestjs.demo:
     image: nestjs-demo:latest
     container_name: nestjs-demo
     restart: always
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=mongodb://admin:admin@localhost:27017/admin
     ports:
-      - 3000:3000
-    volumes:
-      - ./.env:/opt/app/.env
+      - "3000:3000"
+    depends_on:
+      - mongo
+    networks:
+      - db_network
+
+volumes:
+  mongo_data:
+
+networks:
+  db_network:
