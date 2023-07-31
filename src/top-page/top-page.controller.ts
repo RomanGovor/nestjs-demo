@@ -18,10 +18,14 @@ import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { FindTopPageDto } from './dto/find-top-page.dto';
 import { NOT_FOUND_TOP_PAGE_ERROR } from './top-page.constants';
 import { TopPageService } from './top-page.service';
+import { HhService } from 'src/hh/hh.service';
 
 @Controller('top-page')
 export class TopPageController {
-  constructor(private readonly topPageService: TopPageService) {}
+  constructor(
+    private readonly topPageService: TopPageService,
+    private readonly hhService: HhService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
@@ -79,5 +83,14 @@ export class TopPageController {
   @Get('textSearch/:text')
   async textSearch(@Param('text') text: string) {
     return this.topPageService.findByText(text);
+  }
+
+  async test() {
+    const data = await this.topPageService.findForHhUpdate(new Date());
+    for (const page of data) {
+      const hhData = await this.hhService.getData(page.category);
+      page.hh = hhData;
+      await this.topPageService.updateById(page._id, page);
+    }
   }
 }
