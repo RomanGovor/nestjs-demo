@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
@@ -25,6 +26,7 @@ export class TopPageController {
   constructor(
     private readonly topPageService: TopPageService,
     private readonly hhService: HhService,
+    private readonly scheduleRegistry: SchedulerRegistry,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -85,6 +87,7 @@ export class TopPageController {
     return this.topPageService.findByText(text);
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async test() {
     const data = await this.topPageService.findForHhUpdate(new Date());
     for (const page of data) {
