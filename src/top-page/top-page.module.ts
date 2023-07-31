@@ -14,6 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
     ]),
   ],
+  exports: [TopPageService],
   providers: [TopPageService],
 })
 export class TopPageModule {}
